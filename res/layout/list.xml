@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvdat"
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="Phone used on day for Time:" />
+
+    <TextView
+        android:id="@+id/tvtim"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="Hours"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>
