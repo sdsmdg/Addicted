@@ -2,12 +2,17 @@ package com.abhi.addicted;
 
 import java.util.Calendar;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -23,6 +28,8 @@ public class Background extends Service implements OnTouchListener {
 	 * public Background(String name) { super(name); // TODO Auto-generated
 	 * constructor stub } public Background(){ super(null); }
 	 */
+	public static NotificationManager nm=null;
+	public final static int id = 12345;
 	static BroadcastReceiver mReceiver = null;
 	public static int time;
 	public static int starts = 0;
@@ -39,9 +46,9 @@ public class Background extends Service implements OnTouchListener {
 		super.onCreate();
 		IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
-		//setting WindowManager for capturing Touch event on full view
+		// setting WindowManager for capturing Touch event on full view
 		mReceiver = new Broadcast();
-		linear = new LinearLayout(this);
+		/*linear = new LinearLayout(this);
 		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT);
 		linear.setLayoutParams(lp);
@@ -56,7 +63,7 @@ public class Background extends Service implements OnTouchListener {
 						| WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
 				PixelFormat.TRANSLUCENT);
 		mParams.gravity = Gravity.LEFT | Gravity.TOP;
-		windowmanager.addView(linear, mParams);
+		windowmanager.addView(linear, mParams);*/
 		registerReceiver(mReceiver, filter);
 	}
 
@@ -111,7 +118,7 @@ public class Background extends Service implements OnTouchListener {
 	public int onStartCommand(Intent arg1, int flags, int startId) {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
-        //getting and calculating usage time 
+		// getting and calculating usage time
 		if (arg1.getIntExtra("day", 0) == day) {
 			if (arg1.getIntExtra("stop", i) == stops
 					&& arg1.getIntExtra("start", i) == starts) {
@@ -149,12 +156,13 @@ public class Background extends Service implements OnTouchListener {
 					+ "mins");
 		}
 		setArray();
+		CheckTime();
 		return super.onStartCommand(arg1, flags, startId);
 	}
 
 	private void setArray() {
 		// TODO Auto-generated method stub
-		//setting array for storing data which is used for list
+		// setting array for storing data which is used for list
 		int i = MainActivity.array.length;
 		if (i == 0) {
 			MainActivity.dayarray = new int[1];
@@ -186,7 +194,7 @@ public class Background extends Service implements OnTouchListener {
 	@Override
 	public boolean onTouch(View arg0, MotionEvent arg1) {
 		// TODO Auto-generated method stub
-		//for updating usage time via Global Touch event
+		// for updating usage time via Global Touch event
 		if (arg1.getAction() == MotionEvent.ACTION_DOWN) {
 			Calendar a = Calendar.getInstance();
 			int star = a.get(Calendar.MINUTE);
@@ -206,4 +214,33 @@ public class Background extends Service implements OnTouchListener {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
+	public void CheckTime() {
+		SharedPreferences sp = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		
+		if (Integer.parseInt(sp.getString("Hours", ""+0)) == (time / 60) && (time % 60) == 0) {
+			nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			Intent i = new Intent(this, MainActivity.class);
+			PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+			String body = "Your Usage time has been reached.";
+			String title = "Addicted";
+			Notification n = new Notification(R.drawable.ic_launcher, body,
+					System.currentTimeMillis());
+			n.setLatestEventInfo(this, title, body, pi);
+			n.defaults = Notification.DEFAULT_ALL;
+			nm.notify(id, n);
+		}else if((Integer.parseInt(sp.getString("Hours",""+0))-(time/60))==24 && (time%60)==0){
+			nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			Intent i = new Intent(this, MainActivity.class);
+			PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
+			String body = "Your Usage time has been reached.";
+			String title = "Addicted";
+			Notification n = new Notification(R.drawable.ic_launcher, body,
+					System.currentTimeMillis());
+			n.setLatestEventInfo(this, title, body, pi);
+			n.defaults = Notification.DEFAULT_ALL;
+			nm.notify(id, n);
+		}
+	}
 }

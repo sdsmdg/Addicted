@@ -3,6 +3,16 @@
 <item
     android:id="@+id/timelim"
     android:title="Set Usage Limit"
+    android:orderInCategory="1"
     ></item>"
-
+<item
+    android:id="@+id/setting"
+    android:title="Setting"
+    android:orderInCategory="2"
+    ></item>
+<item
+    android:id="@+id/exit"
+    android:title="exit"
+    android:orderInCategory="3"
+    ></item>
 </menu>

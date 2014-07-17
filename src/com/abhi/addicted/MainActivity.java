@@ -3,9 +3,9 @@ package com.abhi.addicted;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,6 +32,10 @@ public class MainActivity extends Activity implements OnItemClickListener {
 		// time.setText(""+array[array.length-1]);
 		lv.setAdapter(new InfoAdapter(this, array, dayarray));
 		lv.setOnItemClickListener(this);
+		if (Background.nm == null) {
+		} else {
+			Background.nm.cancel(Background.id);
+		}
 	}
 
 	/*
@@ -51,17 +55,29 @@ public class MainActivity extends Activity implements OnItemClickListener {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
-		super.onCreateContextMenu(menu, v, menuInfo);
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		super.onCreateOptionsMenu(menu);
+		MenuInflater extras = getMenuInflater();
+		extras.inflate(R.menu.addicmen, menu);
+		return true;
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.timelim:
+			Intent i = new Intent(this,setTime.class);
+			startActivity(i);
+			break;
+		case R.id.setting:
+			break;
+		case R.id.exit:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

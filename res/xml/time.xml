@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:dialogTitle="Enter Expected Usage Hours"
+        android:entries="@array/title"
+        android:entryValues="@array/Hvalue"
+        android:key="Hours"
+        android:title="Expected Hours" >
+    </ListPreference>
+
+</PreferenceScreen>
